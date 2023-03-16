@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NewsItem from './NewsItem';
+import Spanner from './Spanner';
 
 export class News extends Component {
   constructor() {
@@ -12,11 +13,15 @@ export class News extends Component {
   }
 
   async componentDidMount() {
-    let url =
-      'https://newsapi.org/v2/top-headlines?country=us&apiKey=3f962c2ff91f4a1bbb864f85309aacaa&page=1';
+    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=3f962c2ff91f4a1bbb864f85309aacaa&page=1&pageSize=${this.props.pageSize}`;
+    this.setState({ loading: true });
     let data = await fetch(url);
     let parseData = await data.json();
-    this.setState({ articles: parseData.articles });
+    this.setState({
+      articles: parseData.articles,
+      totalResults: parseData.totalResults,
+      loading: false,
+    });
   }
 
   handlerPraviousClick = async () => {
@@ -24,39 +29,58 @@ export class News extends Component {
 
     let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=3f962c2ff91f4a1bbb864f85309aacaa&page=${
       this.state.page - 1
-    }`;
+    }&pageSize=${this.props.pageSize}`;
+    this.setState({ loading: true });
     let data = await fetch(url);
     let parseData = await data.json();
-    this.setState({ page: this.state.page - 1, articles: parseData.articles });
+    this.setState({
+      page: this.state.page - 1,
+      articles: parseData.articles,
+      loading: false,
+    });
   };
 
   handlerNextClick = async () => {
     console.log('next');
-    let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=3f962c2ff91f4a1bbb864f85309aacaa&page=${
-      this.state.page + 1
-    }`;
-    let data = await fetch(url);
-    let parseData = await data.json();
-    this.setState({ page: this.state.page + 1, articles: parseData.articles });
+    if (
+      !(
+        this.state.page + 1 >
+        Math.ceil(this.state.totalResults / this.props.pageSize)
+      )
+    ) {
+      let url = `https://newsapi.org/v2/top-headlines?country=us&apiKey=3f962c2ff91f4a1bbb864f85309aacaa&page=${
+        this.state.page + 1
+      }&pageSize=${this.props.pageSize}`;
+      this.setState({ loading: true });
+      let data = await fetch(url);
+      let parseData = await data.json();
+      this.setState({
+        page: this.state.page + 1,
+        articles: parseData.articles,
+        loading: false,
+      });
+    }
   };
 
   render() {
     return (
       <div className='container mt-3'>
         <h1 className='text-center'>NewsMonkey-Top Headlines</h1>
+        {this.state.loading && <Spanner />}
         <div className='row'>
-          {this.state.articles.map((element) => {
-            return (
-              <div className='col-md-4 mt-3' key={element.url}>
-                <NewsItem
-                  title={element.title ? element.title : ''}
-                  description={element.description ? element.description : ''}
-                  imageUrl={element.urlToImage}
-                  newsUrl={element.url}
-                />
-              </div>
-            );
-          })}
+          {!this.state.loading &&
+            this.state.articles.map((element) => {
+              return (
+                <div className='col-md-4 mt-3' key={element.url}>
+                  <NewsItem
+                    title={element.title ? element.title : ''}
+                    description={element.description ? element.description : ''}
+                    imageUrl={element.urlToImage}
+                    newsUrl={element.url}
+                  />
+                </div>
+              );
+            })}
         </div>
         <div className='container d-flex justify-content-between mt-3'>
           <button
@@ -68,6 +92,10 @@ export class News extends Component {
             &larr; Pravious
           </button>
           <button
+            disabled={
+              this.state.page + 1 >
+              Math.ceil(this.state.totalResults / this.props.pageSize)
+            }
             type='button'
             className='btn btn-dark'
             onClick={this.handlerNextClick}
