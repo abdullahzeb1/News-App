@@ -59,6 +59,7 @@ export class News extends Component {
         articles: parseData.articles,
         loading: false,
       });
+    } else {
     }
   };
 
