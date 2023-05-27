@@ -7,7 +7,7 @@ export class navBar extends Component {
       <div>
         <nav className='navbar navbar-expand-lg bg-dark'>
           <div className='container-fluid'>
-            <Link className='navbar-brand' to='/'>
+            <Link className='navbar-brand text-white' to='/'>
               NewsMonkey
             </Link>
             <button
@@ -27,42 +27,58 @@ export class navBar extends Component {
             >
               <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
                 <li className='nav-item'>
-                  <Link className='nav-link active' aria-current='page' to='/'>
-                    Home
-                  </Link>
-                </li>
-                <li className='nav-item'>
-                  <Link className='nav-link' to='/business'>
+                  <Link
+                    className='nav-link text-white text-danger'
+                    to='/business'
+                  >
                     Business
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-link' to='/entertainment'>
+                  <Link
+                    className='nav-link text-white text-danger'
+                    to='/entertainment'
+                  >
                     Entertainment
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-link' to='/general'>
+                  <Link
+                    className='nav-link text-white text-danger'
+                    to='/general'
+                  >
                     General
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-link' to='/health'>
+                  <Link
+                    className='nav-link text-white text-danger'
+                    to='/health'
+                  >
                     Health
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-link' to='/science'>
+                  <Link
+                    className='nav-link text-white text-danger'
+                    to='/science'
+                  >
                     Science
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-link' to='/sports'>
+                  <Link
+                    className='nav-link text-white text-danger'
+                    to='/sports'
+                  >
                     Sports
                   </Link>
                 </li>
                 <li className='nav-item'>
-                  <Link className='nav-link' to='/technology'>
+                  <Link
+                    className='nav-link text-white text-danger'
+                    to='/technology'
+                  >
                     Technology
                   </Link>
                 </li>
